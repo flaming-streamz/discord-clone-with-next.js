@@ -15,7 +15,7 @@ export const FileUpload = (props: Props) => {
 
   if (props.value && fileType !== "pdf") {
     return (
-      <div className="relative h-20 w-20">
+      <div className="relative h-20 w-20 flex justify-center items-center">
         <Image fill src={props.value} alt="Upload" className="rounded-full" />
       </div>
     );
