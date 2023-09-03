@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import {
   Dialog,
@@ -18,6 +19,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   name: z.string().trim().min(1, { message: "Server name is required!" }),
@@ -26,6 +28,7 @@ const schema = z.object({
 
 export const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -41,7 +44,18 @@ export const InitialModal = () => {
 
   const isFormLoading = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {};
+  const onSubmit = async (values: z.infer<typeof schema>) => {
+    try {
+      await axios.post("/api/servers", values);
+
+      // reset form, refresh router and window location
+      form.reset();
+      router.refresh();
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //   Hydration error fix
   if (!isMounted) return null;
@@ -68,7 +82,7 @@ export const InitialModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Server Image</FormLabel>
-                    <FormControl className="w-full">
+                    <FormControl className="bg-black">
                       <FileUpload endPoint="serverImage" value={field.value} onChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
