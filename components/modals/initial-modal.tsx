@@ -68,7 +68,7 @@ export const InitialModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Server Image</FormLabel>
-                    <FormControl>
+                    <FormControl className="w-full">
                       <FileUpload endPoint="serverImage" value={field.value} onChange={field.onChange} />
                     </FormControl>
                     <FormMessage />
