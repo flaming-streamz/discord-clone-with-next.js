@@ -6,7 +6,6 @@ import { db } from "@/lib/db";
 import { MemberRole } from "@prisma/client";
 
 export async function POST(req: Request) {
-  console.log("Running Servers Post route ... ");
   try {
     const { name, imageUrl } = await req.json();
     const profile = await currentProfile();
@@ -28,7 +27,7 @@ export async function POST(req: Request) {
     });
     return NextResponse.json(server);
   } catch (error) {
-    console.log("API ~ servers ~ Post error", error);
+    console.log("API ~ servers ~ Post error", error); // TODO clg remove
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

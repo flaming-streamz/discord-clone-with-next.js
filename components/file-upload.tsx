@@ -16,15 +16,17 @@ export const FileUpload = (props: Props) => {
 
   if (props.value && fileType !== "pdf") {
     return (
-      <div className="relative h-20 w-20 bg-blue-500 flex justify-center items-center">
-        <Image fill src={props.value} alt="Upload" className="rounded-full" />
-        <button
-          className="absolute bg-rose-500 text-white rounded-full top-0 right-0 shadow-sm"
-          type="button"
-          onClick={() => props.onChange("")}
-        >
-          <X size={18} />
-        </button>
+      <div className="flex w-full items-center justify-center">
+        <div className="relative h-20 w-20 flex justify-center items-center">
+          <Image fill src={props.value} alt="Upload" className="rounded-full" />
+          <button
+            className="absolute bg-rose-500 text-white rounded-full top-0 right-0 shadow-sm"
+            type="button"
+            onClick={() => props.onChange("")}
+          >
+            <X size={18} />
+          </button>
+        </div>
       </div>
     );
   }
