@@ -51,7 +51,7 @@ export const ServerChannel = (props: Props) => {
           <ActionTooltip label="Edit" side="right">
             <Edit
               className="hidden group-hover:block w-4 h-4 text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
-              onClick={() => {}}
+              onClick={() => onOpen("editChannel", { server, channel })}
             />
           </ActionTooltip>
           <ActionTooltip label="Delete" side="right">
