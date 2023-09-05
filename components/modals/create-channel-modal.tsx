@@ -1,21 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import qs from "query-string";
 
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useModal } from "@/hooks/use-modal-store";
+import { ChannelType } from "@prisma/client";
 
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-import { useModal } from "@/hooks/use-modal-store";
-import { ChannelType } from "@prisma/client";
 
 const schema = z.object({
   name: z
@@ -24,23 +24,36 @@ const schema = z.object({
     .refine((name) => name !== "general", {
       message: "Channel name cannot be 'general'",
     }),
-  type: z.nativeEnum(ChannelType),
+  type: z.nativeEnum(ChannelType).default(ChannelType.TEXT),
 });
 
 export const CreateChannelModal = () => {
   const router = useRouter();
   const params = useParams();
-  const { isOpen, onClose, type } = useModal();
+
+  const {
+    isOpen,
+    onClose,
+    type,
+    data: { channelType },
+  } = useModal();
+
   const isModalOpen = isOpen && type === "createChannel";
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType.TEXT,
     },
     reValidateMode: "onChange",
   });
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue("type", channelType);
+    }
+  }, [channelType, form]);
 
   const isFormLoading = form.formState.isSubmitting;
 
